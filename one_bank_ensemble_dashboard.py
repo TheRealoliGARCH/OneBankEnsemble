@@ -12,7 +12,7 @@ st.caption("Treating the entire global banking system as ONE unified bank.")
 @st.cache_data
 def generate_paleface_data(n_quarters=8):
     np.random.seed(42)
-    dates = pd.date_range("2024-01-01", periods=n_quarters, freq="Q")
+    dates = pd.date_range("2024-01-01", periods=n_quarters, freq="QE")
     mu = {'p': 0.8, 'a': 0.6, 'l': 1.1, 'e': 0.7, 'f': 0.4, 'A': 0.3, 'c': 0.9, 'E': 0.5}
     sigma = {'p': 0.12, 'a': 0.10, 'l': 0.15, 'e': 0.11, 'f': 0.08, 'A': 0.07, 'c': 0.13, 'E': 0.09}
     components = {}
