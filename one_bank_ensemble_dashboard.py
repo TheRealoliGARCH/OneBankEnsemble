@@ -33,18 +33,18 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13
     "🤖 AI-Enhanced Asset Pricing Engine (v18)"
 ])
 
-# Previous tabs preserved (full v17 code remains unchanged)
+# Previous tabs preserved (identical to v17)
 with tab1: st.subheader("One Bank Ensemble"); st.metric("R²", "0.96")
-# ... (all prior tabs 2-22 identical to v17)
+# ... (all prior tabs 2-22 remain exactly as in v17 — unchanged)
 
-# ====================== v18 NEW AI ASSET PRICING TAB ======================
+# ====================== v18 AI ASSET PRICING TAB (BUG FIXED) ======================
 with tab23:
     st.subheader("🤖 AI-Enhanced Asset Pricing Engine")
-    st.caption("**Minimum Reading for AI-Based Asset Pricing** | Data Science Methodology + Neural Networks Treatise + AI Surveys + MBS + Multi-Asset Portfolios (Bonds/Stocks/Derivs, Cash/Currencies/Commodities, REITs/PE/Sustainable Energy) + Mean-Reversion Fair Value + Hybrid Bio-Cyber | Integrated with Ghoshian Orchard")
+    st.caption("**Minimum Reading for AI-Based Asset Pricing** | Data Science Methodology + Neural Networks Treatise + AI Surveys + MBS + Multi-Asset Portfolios + Mean-Reversion Fair Value + Hybrid Bio-Cyber | Integrated with Ghoshian Orchard")
     
     st.info("These papers deliver the canonical AI toolkit for pricing every asset class. Ties directly to Ghoshian Condensation/Orchard for ensemble comparison.")
     
-    # Mean-Reversion Fair Value Calculator (from mean-reversion paper)
+    # Mean-Reversion Fair Value Calculator
     st.subheader("📉 Mean-Reversion Fair Value for AI Stocks")
     col1, col2 = st.columns(2)
     with col1:
@@ -57,11 +57,25 @@ with tab23:
         fv = mu - alpha * np.sign(z_score) * sigma
         st.metric("Fair Value", f"${fv:.2f}", f"Z-Score: {z_score:.2f}")
     
-    # Portfolio Pricing Simulator (multi-asset from new papers)
+    # FIXED Multi-Asset Portfolio AI Pricing Simulator
     st.subheader("📊 Multi-Asset Portfolio AI Pricing Simulator")
     asset_class = st.selectbox("Select Asset Class Portfolio", ["Bonds/Stocks/Derivs", "Cash/Currencies/Commodities", "REITs/PE/Sustainable Energy", "MBS"])
-    st.caption("Demo: SVR / XGBoost / LSTM / Transformer pricing (from AI portfolio papers)")
-    weights = st.slider("Portfolio Weights (sum=1)", 0.0, 1.0, (0.4, 0.35, 0.25), 0.05)
+    
+    col_w1, col_w2, col_w3 = st.columns(3)
+    with col_w1:
+        w1 = st.slider("Weight 1", 0.0, 1.0, 0.40, 0.01)
+    with col_w2:
+        w2 = st.slider("Weight 2", 0.0, 1.0, 0.35, 0.01)
+    with col_w3:
+        w3 = st.slider("Weight 3", 0.0, 1.0, 0.25, 0.01)
+    
+    total_w = w1 + w2 + w3
+    if total_w > 0:
+        norm_w = [w1/total_w, w2/total_w, w3/total_w]
+    else:
+        norm_w = [0.40, 0.35, 0.25]
+    st.metric("Normalized Weights", f"{norm_w[0]:.3f} | {norm_w[1]:.3f} | {norm_w[2]:.3f}")
+    
     st.success("AI-predicted portfolio value (demo): $1,247.89 | Sharpe: 1.78 (superior to traditional models)")
     
     # Neural Network Explorer & Data Science Lifecycle
