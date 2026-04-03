@@ -6,3 +6,4 @@ scipy
 pymc
 arviz
 fpdf2
+zipfile36
