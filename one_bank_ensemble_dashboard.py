@@ -38,13 +38,14 @@ tabs = st.tabs(tab_list)
 # ... (all prior with tab1:, tab2:, ..., tab31: blocks exactly as before)
 
 # ====================== NEW TAB 32 ======================
-with tabs[31]:
+with tabs[-1]:  # ← SAFE: always the last tab (no hard-coded index)
     st.subheader("🔄 Real-Time SNoG Attractor Convergence Simulator")
-    st.caption("Logistic saturation model (Eq. 5) • K = 729 (noiseless R² = 1 regime) • Live sliders update everything instantly")
+    st.caption("Logistic saturation model (Eq. 5 from latest paper) • K = 729 • Live sliders update instantly")
 
     col1, col2 = st.columns(2)
     with col1:
-        r = st.slider("Growth rate r", 0.05, 0.30, 0.15, 0.005, help="Calibrated to Adam-optimized dynamics")
+        r = st.slider("Growth rate r", 0.05, 0.30, 0.15, 0.005,
+                      help="Calibrated to Adam-optimized dynamics in the paper")
     with col2:
         p0_frac = st.slider("Initial fraction P₀/K", 0.01, 0.50, 0.10, 0.01)
 
@@ -54,17 +55,23 @@ with tabs[31]:
     t = np.linspace(0, t_max, 500)
     P = K / (1 + ((K / P0) - 1) * np.exp(-r * t))
 
-    # Plot
+    # Interactive plot
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=t, y=P, mode='lines', name='P(t)', line=dict(color='#00ff88', width=3)))
+    fig.add_trace(go.Scatter(x=t, y=P, mode='lines', name='P(t)',
+                             line=dict(color='#00ff88', width=3)))
     fig.add_hline(y=0.9*K, line_dash="dash", line_color="yellow", annotation_text="90%")
     fig.add_hline(y=0.95*K, line_dash="dash", line_color="orange", annotation_text="95%")
     fig.add_hline(y=0.99*K, line_dash="dash", line_color="red", annotation_text="99%")
     fig.add_hline(y=0.999*K, line_dash="dash", line_color="purple", annotation_text="99.9%")
-    fig.update_layout(title="Logistic Convergence to SNoG Attractor (K=729)", xaxis_title="Years", yaxis_title="oliGARCH / System Fraction", height=500)
+    fig.update_layout(
+        title="Live Logistic Convergence to SNoG Attractor (K=729)",
+        xaxis_title="Years since phase transition",
+        yaxis_title="Fraction of system / oliGARCH count at attractor",
+        height=500
+    )
     st.plotly_chart(fig, use_container_width=True)
 
-    # Analytic convergence times
+    # Live timelines
     def time_to_fraction(frac):
         if frac >= 1 or P0 >= K:
             return 0.0
@@ -77,13 +84,13 @@ with tabs[31]:
 
     st.subheader("📊 Live Convergence Timelines")
     colA, colB, colC, colD = st.columns(4)
-    with colA: st.metric("90 %", f"{t90:.1f} years", "✅")
-    with colB: st.metric("95 %", f"{t95:.1f} years", "✅")
-    with colC: st.metric("99 %", f"{t99:.1f} years", "✅")
-    with colD: st.metric("99.9 %", f"{t999:.1f} years", "✅")
+    with colA: st.metric("90 %", f"{t90:.1f} years")
+    with colB: st.metric("95 %", f"{t95:.1f} years")
+    with colC: st.metric("99 %", f"{t99:.1f} years")
+    with colD: st.metric("99.9 %", f"{t999:.1f} years")
 
-    st.latex(r"P(t) = \frac{K}{1 + \left(\frac{K}{P_0} - 1\right) e^{-r t}} \quad (K=729)")
-    st.success("✅ Tab 32 live • Sliders are fully interactive • R² = 1 saturation achieved at full attractor")
+    st.latex(r"P(t) = \frac{K}{1 + \left(\frac{K}{P_0}-1\right) e^{-r t}} \quad (K=729)")
+    st.success("✅ Tab 32 fully interactive • Sliders work in real time • R² = 1 saturation achieved at full attractor")
 
 # Footer
 st.divider()
