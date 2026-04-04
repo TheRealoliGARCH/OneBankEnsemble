@@ -38,7 +38,7 @@ tabs = st.tabs(tab_list)
 # ... (all prior with tab1:, tab2:, ..., tab31: blocks exactly as before)
 
 # ====================== NEW TAB 32 ======================
-with tabs[31]:  # index 31 = Tab 32
+with tabs[31]:
     st.subheader("🔄 Real-Time SNoG Attractor Convergence Simulator")
     st.caption("Logistic saturation model (Eq. 5) • K = 729 (noiseless R² = 1 regime) • Live sliders update everything instantly")
 
